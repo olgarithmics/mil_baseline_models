@@ -2,7 +2,6 @@ import os
 import numpy as np
 import scipy.io
 import cv2
-import mahotas
 import glob
 from PIL import Image
 from data_aug import hematoxylin_eosin_aug, normalize
@@ -23,13 +22,7 @@ class ColonCancerDataset(object):
 
         return feature.reshape(-1)
 
-    def fd_haralick(self, image):  # convert the image to grayscale
-        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        gray = gray.astype(int)
-        # compute the haralick texture feature vector
-        haralick = mahotas.features.haralick(gray).mean(axis=0)
 
-        return haralick
 
     def mean_std(self, image):
         pixel_num = (image.shape[0] * image.shape[1] * 3)

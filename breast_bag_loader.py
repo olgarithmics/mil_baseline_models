@@ -6,7 +6,7 @@ import random
 import numpy as np
 
 import cv2
-import mahotas
+
 from data_aug import hematoxylin_eosin_aug
 
 
@@ -28,13 +28,6 @@ class BreastCancerDataset(object):
 
         return feature.reshape(-1)
 
-    def fd_haralick(self, image):  # convert the image to grayscale
-        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        gray = gray.astype(int)
-        # compute the haralick texture feature vector
-        haralick = mahotas.features.haralick(gray).mean(axis=0)
-
-        return haralick
 
     def mean_std(self, image):
         pixel_num = (image.shape[0] * image.shape[1] * 3)
@@ -61,8 +54,8 @@ class BreastCancerDataset(object):
             temp_name=os.path.join(os.path.dirname(path),"img{}.txt".format(img_name))
             label = 0 if "benign" in img_name else 1
             img =cv2.imread(path)
-            if self.augmentation:
-                img = hematoxylin_eosin_aug(img)
+
+            img = hematoxylin_eosin_aug(img)
 
             cropped_cells = []
 
@@ -74,6 +67,7 @@ class BreastCancerDataset(object):
                     y = line.split(",")[1]
                     patch = img[int(x) - self.stride:int(x) + self.stride,
                             int(y) - self.stride:int(y) + self.stride]
+
                     patch = np.asarray(patch, dtype=np.float32)
                     global_feature = np.hstack([self.mean_std(patch), self.fd_hu_moments(patch)])
 

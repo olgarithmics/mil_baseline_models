@@ -29,9 +29,6 @@ def model_training(classifier, dataset):
 
     print("accuracy {}".format(accuracy))
 
-    #     auc = roc_auc_score(y_true, y_pred)
-    #     print("AUC {}".format(auc))
-
     y_true = list(map(lambda x: 0 if x == -1 else 1, y_true))
     y_pred = list(map(lambda x: 0 if x == -1 else 1, y_pred))
     precision = precision_score(y_true, np.round(np.clip(y_pred, 0, 1)))
@@ -39,7 +36,6 @@ def model_training(classifier, dataset):
 
     recall = recall_score(y_true, np.round(np.clip(y_pred, 0, 1)))
     print("recall {}".format(recall))
-
 
     return accuracy,recall, precision
 
